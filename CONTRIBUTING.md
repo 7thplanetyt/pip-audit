@@ -77,6 +77,17 @@ make test T=path/to/file.py
 `pip-audit` has a [`pytest`](https://docs.pytest.org/)-based unit test suite,
 including code coverage with [`coverage.py`](https://coverage.readthedocs.io/).
 
+CI also runs the offline tests with networking disabled, including for child
+processes. With Docker installed, you can reproduce this check locally:
+
+```bash
+docker build --tag pip-audit-offline-tests --file .github/Dockerfile.offline-tests .
+docker run --rm --network none pip-audit-offline-tests
+```
+
+The build installs dependencies before networking is disabled. Tests marked
+`online` are skipped; other tests must work without a network connection.
+
 ### Documentation
 
 You can run the documentation build locally:

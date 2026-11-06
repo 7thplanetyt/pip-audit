@@ -43,6 +43,19 @@ jobs:
           include-hidden-files: true
           if-no-files-found: ignore
 
+  test-offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build offline test environment
+        run: docker build --tag pip-audit-offline-tests --file .github/Dockerfile.offline-tests .
+
+      - name: Test without networking
+        run: docker run --rm --network none pip-audit-offline-tests
+
   test-windows:
     runs-on: windows-latest
     steps:
@@ -111,7 +124,7 @@ jobs:
   all-tests-pass:
     if: always()
 
-    needs: [coverage]
+    needs: [coverage, test-offline]
 
     runs-on: ubuntu-latest
 

@@ -200,6 +200,7 @@ def test_requirement_source_fix(req_file):
     )
 
 
+@pytest.mark.online
 def test_requirement_source_fix_roundtrip(req_file):
     req_path = req_file()
     with open(req_path, "w") as f:
@@ -223,6 +224,7 @@ def test_requirement_source_fix_roundtrip(req_file):
         assert f.read().strip() == "flask==1.0"
 
 
+@pytest.mark.online
 def test_requirement_source_fix_roundtrip_non_canonical_name(req_file):
     req_path = req_file()
     with open(req_path, "w") as f:
@@ -580,6 +582,7 @@ def test_requirement_source_disable_pip_duplicate_dependencies_diff_specifier(re
         list(source.collect())
 
 
+@pytest.mark.online
 def test_requirement_source_no_double_open(monkeypatch, req_file):
     source = _init_requirement([(req_file(), "flask==2.0.1")])
 
@@ -612,6 +615,7 @@ def test_requirement_source_no_double_open(monkeypatch, req_file):
     assert ResolvedDependency("Flask", Version("2.0.1")) in specs
 
 
+@pytest.mark.online
 @pytest.mark.skipif(sys.platform == "win32", reason="os.mkfifo does not exists on windows")
 def test_requirement_source_fifo():
     with TemporaryDirectory() as tmp_dir:
@@ -635,6 +639,7 @@ def test_requirement_source_fifo():
     assert ResolvedDependency("Flask", Version("2.0.1")) in specs
 
 
+@pytest.mark.online
 def test_requirement_source_fix_explicit_subdep(monkeypatch, req_file):
     logger = pretend.stub(warning=pretend.call_recorder(lambda s: None))
     monkeypatch.setattr(requirement, "logger", logger)
@@ -669,6 +674,7 @@ def test_requirement_source_fix_explicit_subdep(monkeypatch, req_file):
     assert len(logger.warning.calls) == 1
 
 
+@pytest.mark.online
 def test_requirement_source_fix_explicit_subdep_multiple_reqs(req_file):
     # Recreate the vulnerable subdependency case.
     source = _init_requirement([(req_file(), "flask==2.0.1")])
@@ -700,6 +706,7 @@ def test_requirement_source_fix_explicit_subdep_multiple_reqs(req_file):
     )
 
 
+@pytest.mark.online
 def test_requirement_source_fix_explicit_subdep_resolver_error(req_file):
     # Recreate the vulnerable subdependency case.
     source = _init_requirement([(req_file(), "flask==2.0.1")])
@@ -723,6 +730,7 @@ def test_requirement_source_fix_explicit_subdep_resolver_error(req_file):
     assert len(mock_resolver.resolve.calls) == 0
 
 
+@pytest.mark.online
 def test_requirement_source_fix_explicit_subdep_comment_retention(req_file):
     # This test is regression testing a weakness in the previous fix implementation.
     #

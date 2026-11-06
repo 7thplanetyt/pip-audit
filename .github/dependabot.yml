@@ -14,3 +14,10 @@ updates:
       interval: daily
     cooldown:
       default-days: 7
+
+  - package-ecosystem: docker
+    directory: /.github
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7

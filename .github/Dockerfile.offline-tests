@@ -1,0 +1,12 @@
+FROM python:3.14-slim@sha256:af8a5aa14780025dbfbcfbc81bd8a91ebd87711dd5b0f48ed71090949dd7cb1d
+
+WORKDIR /src
+COPY pyproject.toml README.md LICENSE ./
+COPY pip_audit ./pip_audit
+RUN python -m pip install --no-cache-dir ".[test]"
+COPY test ./test
+
+# Network-dependent pip calls should fail promptly instead of retrying offline.
+ENV PIP_RETRIES=0
+
+CMD ["python", "-m", "pytest", "--skip-online"]
